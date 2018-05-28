@@ -1,0 +1,1001 @@
+{
+	"info": {
+		"_postman_id": "8dae7a88-708d-4a31-8b77-865cc409141a",
+		"name": "UDEMY",
+		"description": "Udemy POSTMAN course\n\nnotable reference for this course:\n\ndevelopers.trello.com -- for trello API\ndevelopers.mozilla.org -- for JavaScripts\nchaijs.com/api/bdd/ -- for Assertions\n",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Assignments",
+			"description": "",
+			"item": [
+				{
+					"name": "Assignment 1 : Getting Key",
+					"description": "",
+					"item": [
+						{
+							"name": "Creating API Key",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "4d635a0c-37b6-4716-b848-c83acb1d8381",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"tests[\"Status Code is 200\"] = responseCode.code === 200; "
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "api-key",
+										"value": "d29d60bec76f42d2aad893ae28e56389"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Foo"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "https://api.nytimes.com/svc/books/v3/lists.json?list=hardcover%20nonfiction&rank=3&rank-last-week=2&published-date=2017-08-20",
+									"protocol": "https",
+									"host": [
+										"api",
+										"nytimes",
+										"com"
+									],
+									"path": [
+										"svc",
+										"books",
+										"v3",
+										"lists.json"
+									],
+									"query": [
+										{
+											"key": "list",
+											"value": "hardcover%20nonfiction"
+										},
+										{
+											"key": "rank",
+											"value": "3"
+										},
+										{
+											"key": "rank-last-week",
+											"value": "2"
+										},
+										{
+											"key": "published-date",
+											"value": "2017-08-20"
+										}
+									]
+								},
+								"description": "My first assignment"
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Assignment 2 & 3 : Trello API",
+					"description": "",
+					"item": [
+						{
+							"name": "Create TrelloBoard",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7273fcdf-5b3b-4909-9bf1-f2d258f36856",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"",
+											"var jsonData = pm.response.json();",
+											"pm.test(\"Board name should be \"+pm.environment.get(\"boardName\"),function () {",
+											"    pm.expect(jsonData.name).to.eql(pm.environment.get(\"boardName\"));}",
+											");",
+											"",
+											"",
+											"pm.environment.set(\"boardID\", jsonData.id);",
+											"",
+											""
+										]
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "0e710d3e-5f27-42ca-ae32-f33a22b8d188",
+										"type": "text/javascript",
+										"exec": [
+											"//pm.environment.set(\"trelloKey\",\"f52f5c8e361ed1ddc3fe8b64bb84a780\");",
+											"//pm.environment.set(\"trelloToken\",\"ab622cb0e50a3cc2bbee72c6ffe078cfc1ef4450ef8e61124bdec846750212a5\");",
+											"",
+											"// Use currentBoardNumber to store the board number",
+											"let currentBoardNumber = pm.environment.get(\"currentBoardNumber\");",
+											" ",
+											"// Check if currentBoardNumber is already defined",
+											"if (currentBoardNumber) {",
+											"    currentBoardNumber++; // increment",
+											"} else {",
+											"    currentBoardNumber = 1; // start from 1",
+											"}",
+											" ",
+											"let boardName = \"My board \" + currentBoardNumber;",
+											" ",
+											"// Set the boardName for the request",
+											"pm.environment.set(\"boardName\", boardName);",
+											" ",
+											"// Set the currentBoardNumber for future requests",
+											"pm.environment.set(\"currentBoardNumber\", currentBoardNumber);",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "https://api.trello.com/1/boards/?name={{boardName}}&key={{trelloKey}}&token={{trelloToken}}&defaultLists=false",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										""
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{boardName}}"
+										},
+										{
+											"key": "key",
+											"value": "{{trelloKey}}",
+											"description": "required for using trello API"
+										},
+										{
+											"key": "token",
+											"value": "{{trelloToken}}",
+											"description": "required for using trello API"
+										},
+										{
+											"key": "defaultLists",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create TODO List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c1c5424b-8200-45cc-bd45-5ec2b292e8fe",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"var jsonData = pm.response.json();",
+											"pm.test(\"My Card name should be 'TODO'\", function () {",
+											"    pm.expect(jsonData.name).to.eql(\"TODO\");",
+											"});",
+											"pm.test(\"status should be false \", function () {",
+											"    pm.expect(jsonData.closed).to.eql(false);",
+											"});",
+											"pm.test(\"Board ID should be equal to: \" + \"ID \"+pm.environment.get(\"boardID\"), function () {",
+											"    pm.expect(jsonData.idBoard).to.eql(pm.environment.get(\"boardID\"));",
+											"});",
+											"",
+											"",
+											"pm.environment.set(\"todoListID\", jsonData.id );",
+											"pm.test(\"Response time is less than 500ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(550);",
+											"});"
+										]
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "5b76294a-b5bb-453d-8200-f0208b35545d",
+										"type": "text/javascript",
+										"exec": [
+											"/*let trelloBoardID = pm.environment.get(\"BoardName\")",
+											"pm.environment.set(\"trelloBoardID\", trelloBoardID);",
+											"*/"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "https://api.trello.com/1/lists?name=TODO&idBoard={{boardID}}&key={{trelloKey}}&token={{trelloToken}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"lists"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "TODO"
+										},
+										{
+											"key": "idBoard",
+											"value": "{{boardID}}"
+										},
+										{
+											"key": "key",
+											"value": "{{trelloKey}}",
+											"description": "required for using trello API"
+										},
+										{
+											"key": "token",
+											"value": "{{trelloToken}}",
+											"description": "required for using trello API"
+										}
+									]
+								},
+								"description": "Creating new list called TODO inside your already created board."
+							},
+							"response": []
+						},
+						{
+							"name": "Create DONE List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2835937a-9123-42d0-b1ef-3e07463f1e99",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"My Card name should be 'DONE'\", function () {",
+											"    pm.expect(jsonData.idBoard).to.eql(pm.environment.get(\"boardID\"));",
+											"});",
+											"",
+											"//pm.test(\"Should have a given ListID'\", function () {",
+											" //   pm.expect(jsonData.id).to.eql(pm.environment.get(\"doneListID\"));",
+											"//});",
+											"pm.environment.set(\"doneListID\", jsonData.id );"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "https://api.trello.com/1/lists?name=DONE&idBoard={{boardID}}&key={{trelloKey}}&token={{trelloToken}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"lists"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "DONE"
+										},
+										{
+											"key": "idBoard",
+											"value": "{{boardID}}"
+										},
+										{
+											"key": "key",
+											"value": "{{trelloKey}}",
+											"description": "required for using trello API"
+										},
+										{
+											"key": "token",
+											"value": "{{trelloToken}}",
+											"description": "required for using trello API"
+										}
+									]
+								},
+								"description": "Creating new list called TODO inside your already created board."
+							},
+							"response": []
+						},
+						{
+							"name": "Create NEW Card in List",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "c6cf4305-d387-433b-839d-0a951ad6117f",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "45def80f-9834-492e-82f3-45e89593dc91",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"var jsonData = pm.response.json();",
+											"pm.test(\"my task name should be 'Learn Postman'\",",
+											"function () {",
+											"    pm.expect(jsonData.idList).to.eql(pm.environment.get(\"todoListID\"));",
+											"});",
+											"pm.environment.set(\"CardID\", jsonData.id);"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "https://api.trello.com/1/cards?key={{trelloKey}}&token={{trelloToken}}&idList={{todoListID}}&name=Learn%20Postman",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"cards"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{trelloKey}}",
+											"description": "required for using trello API"
+										},
+										{
+											"key": "token",
+											"value": "{{trelloToken}}",
+											"description": "required for using trello API"
+										},
+										{
+											"key": "idList",
+											"value": "{{todoListID}}"
+										},
+										{
+											"key": "name",
+											"value": "Learn%20Postman"
+										}
+									]
+								},
+								"description": " Creating a new card (which is like a task) with the name 'Learn Postman'"
+							},
+							"response": []
+						},
+						{
+							"name": "Move Card to other list",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "747a37fb-f71f-4a11-a848-8f936e988fe5",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"    ",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Should have a given card ID: 'Learn Postman'\", function () {",
+											"    pm.expect(jsonData.name).to.eql(\"Learn Postman\" );",
+											"});",
+											"",
+											"pm.test(\"Should have a given ID List\", function () {",
+											"    pm.expect(jsonData.idList).to.eql(pm.environment.get(\"doneListID\"));",
+											"});",
+											"",
+											"pm.test(\"Should have IDBoard for the given list\", function () {",
+											"    pm.expect(jsonData.idBoard).to.eql(pm.environment.get(\"boardID\"));",
+											"});",
+											""
+										]
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "eb8e2b7e-1df7-4b69-bc51-c7eaf4f4b0a7",
+										"type": "text/javascript",
+										"exec": [
+											"/*",
+											"",
+											"https://api.trello.com/1/cards/5ae85906c2643f55fcc460b9?idList=5ae856a16432b81b5dc91fdb&key=f52f5c8e361ed1ddc3fe8b64bb84a780&token=ab622cb0e50a3cc2bbee72c6ffe078cfc1ef4450ef8e61124bdec846750212a5",
+											"",
+											"*/",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "https://api.trello.com/1/cards/:id?idList={{doneListID}}&key={{trelloKey}}&token={{trelloToken}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"cards",
+										":id"
+									],
+									"query": [
+										{
+											"key": "idList",
+											"value": "{{doneListID}}",
+											"description": "This is where the card will be moved"
+										},
+										{
+											"key": "key",
+											"value": "{{trelloKey}}",
+											"description": "required for using trello API"
+										},
+										{
+											"key": "token",
+											"value": "{{trelloToken}}",
+											"description": "required for using trello API"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{CardID}}",
+											"description": "mark it as parameter with column\n\n>>put column before the  id in the url  to dynamically change the value\n"
+										}
+									]
+								},
+								"description": "Move the card from the TODO list to the DONE list."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "6beb59ca-1103-4d79-b257-73cd41a13dfe",
+										"type": "text/javascript",
+										"exec": [
+											"pm.environment.unset(\"boardID\")",
+											"pm.environment.unset(\"doneListID\")",
+											"pm.environment.unset(\"todoListID\")",
+											"pm.environment.unset(\"CardID\")",
+											"pm.environment.unset(\"boardName\")",
+											"pm.environment.unset(\"currentBoardNumber\")",
+											"",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										]
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "d92b12c6-c348-40ad-b626-683a30ef4f71",
+										"type": "text/javascript",
+										"exec": [
+											"/*",
+											"",
+											"https://api.trello.com/1/boards/5ae85fd1f44f2e7e5da51cb4?key=f52f5c8e361ed1ddc3fe8b64bb84a780&token=ab622cb0e50a3cc2bbee72c6ffe078cfc1ef4450ef8e61124bdec846750212a5",
+											"",
+											"*/",
+											"",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id?key={{trelloKey}}&token={{trelloToken}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{trelloKey}}",
+											"description": "required for using trello API"
+										},
+										{
+											"key": "token",
+											"value": "{{trelloToken}}",
+											"description": "required for using trello API"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardID}}",
+											"description": "mark it as parameter with column\n\n>>put column before the  id in the url  to dynamically change the value\n"
+										}
+									]
+								},
+								"description": "Deletes the board, so that your trello account does not get filled with useless boards."
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		},
+		{
+			"name": "Exercises",
+			"description": "",
+			"item": [
+				{
+					"name": "Trello API",
+					"description": "",
+					"item": [
+						{
+							"name": "Trello Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "efc4d32d-da55-4efb-8f6f-aed00eefd4dc",
+										"type": "text/javascript",
+										"exec": [
+											"/*pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"My board name should be 'my New Board'\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    var jsonData2 = pm.response.json();",
+											"    pm.expect(jsonData.name).to.eql('my New Board');",
+											"    pm.expect(jsonData.desc).to.eql('coded by sep');",
+											"});",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"if (responseCode.code === 200){",
+											"    console.info (\"log is 200\");",
+											"}else{",
+											"    console.info (\"log is not 200\");",
+											"}",
+											"",
+											"if (responseTime.time > 200){",
+											"    console.info(\"response time is greater 200 ms\");",
+											"}",
+											"*/"
+										]
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "6dd9c0a3-ce95-4e23-a089-33d7a245310f",
+										"type": "text/javascript",
+										"exec": [
+											"pm.environment.set(\"trelloKey\",\"f52f5c8e361ed1ddc3fe8b64bb84a780\");",
+											"pm.environment.set(\"trelloToken\",\"ab622cb0e50a3cc2bbee72c6ffe078cfc1ef4450ef8e61124bdec846750212a5\");",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "https://api.trello.com/1/boards/?name=my%20New%20Board&key={{trelloKey}}&token={{trelloToken}}&defaultLists=false",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										""
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "my%20New%20Board"
+										},
+										{
+											"key": "key",
+											"value": "{{trelloKey}}"
+										},
+										{
+											"key": "token",
+											"value": "{{trelloToken}}"
+										},
+										{
+											"key": "defaultLists",
+											"value": "false"
+										},
+										{
+											"key": "desc",
+											"value": "coded by sep",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		},
+		{
+			"name": "Lessons",
+			"description": "",
+			"item": [
+				{
+					"name": "Assertion on Arrays",
+					"description": "",
+					"item": [
+						{
+							"name": "Assertion on Array",
+							"description": "Assertion reference from Assertion Chai\nlink: http://www.chaijs.com/api/bdd/",
+							"item": [
+								{
+									"name": "Assertion on Arrays using JS",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "0c716805-2d1d-45aa-b83d-ba1a041876ab",
+												"type": "text/javascript",
+												"exec": [
+													"let jsonData = pm.response.json();",
+													"let manufacturer;",
+													"",
+													"for (let filter of jsonData.filters){",
+													"    if (filter.name == \"MANUFACTURER\"){",
+													"        manufacturer = filter; ",
+													"    }",
+													"}",
+													"",
+													"console.log(typeof manufacturer)",
+													"",
+													"pm.test(\"Manufacturer should not be allowed\", function () {",
+													"    pm.expect(manufacturer.name).to.eql(\"MANUFACTURER\");",
+													"    pm.expect(manufacturer.isAllowed).to.be.false;",
+													"});"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {},
+										"url": {
+											"raw": "http://www.mocky.io/v2/5ab350d62f00005a00ca3663",
+											"protocol": "http",
+											"host": [
+												"www",
+												"mocky",
+												"io"
+											],
+											"path": [
+												"v2",
+												"5ab350d62f00005a00ca3663"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Assertion on Arrays",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "4ec12b6e-58cf-4ba1-8632-9444c0b3a53e",
+												"type": "text/javascript",
+												"exec": [
+													"let jsonData = pm.response.json();",
+													"let manufacturer = jsonData.filters[2];",
+													"console.log(manufacturer);",
+													"",
+													"",
+													"",
+													"",
+													"pm.test(\"Manufacturer should not be allowed\", function () {",
+													"    pm.expect(manufacturer.name).to.eql(\"MANUFACTURER\");",
+													"    pm.expect(manufacturer.isAllowed).to.be.false;",
+													"});"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {},
+										"url": {
+											"raw": "http://www.mocky.io/v2/5ab350d62f00005a00ca3663",
+											"protocol": "http",
+											"host": [
+												"www",
+												"mocky",
+												"io"
+											],
+											"path": [
+												"v2",
+												"5ab350d62f00005a00ca3663"
+											]
+										}
+									},
+									"response": [
+										{
+											"id": "17a4c880-44b6-494e-955a-71733132d4df",
+											"name": "Assertion on Arrays",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"body": {},
+												"url": {
+													"raw": "http://www.mocky.io/v2/5ab350d62f00005a00ca3663",
+													"protocol": "http",
+													"host": [
+														"www",
+														"mocky",
+														"io"
+													],
+													"path": [
+														"v2",
+														"5ab350d62f00005a00ca3663"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Connection",
+													"value": "keep-alive",
+													"name": "Connection",
+													"description": "Options that are desired for the connection"
+												},
+												{
+													"key": "Content-Length",
+													"value": "393",
+													"name": "Content-Length",
+													"description": "The length of the response body in octets (8-bit bytes)"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json",
+													"name": "Content-Type",
+													"description": "The mime type of this content"
+												},
+												{
+													"key": "Date",
+													"value": "Fri, 18 May 2018 10:53:01 GMT",
+													"name": "Date",
+													"description": "The date and time that the message was sent"
+												},
+												{
+													"key": "Server",
+													"value": "Cowboy",
+													"name": "Server",
+													"description": "A name for the server"
+												},
+												{
+													"key": "Via",
+													"value": "1.1 vegur",
+													"name": "Via",
+													"description": "Informs the client of proxies through which the response was sent."
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"companyId\": 10101,\n    \"regionId\": 36554,\n    \"filters\": [\n        {\n            \"id\": 101,\n            \"name\": \"VENDOR\",\n            \"isAllowed\": false\n        },\n        {\n            \"id\": 102,\n            \"name\": \"COUNTRY\",\n            \"isAllowed\": true\n        },\n        {\n            \"id\": 103,\n            \"name\": \"MANUFACTURER\",\n            \"isAllowed\": false\n        }\n    ]\n}"
+										}
+									]
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "d3c0722a-70f1-4ee2-b91b-a615e59c113a",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "99532114-a70f-4e20-bbde-4625173b9543",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Assertion on Nested Objects",
+							"description": "",
+							"item": [
+								{
+									"name": "Assertions on Nested Objects",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "bc32b87b-8930-49d5-9cca-43d55c516d83",
+												"type": "text/javascript",
+												"exec": [
+													"let jsonData = pm.response.json();",
+													"let commentsStatus = jsonData.prefs.comments.status;",
+													"console.log(\"comment status is \"+ commentsStatus);",
+													"",
+													"",
+													"",
+													"pm.test(\"comments should be disabled\", function(){",
+													"    pm.expect(commentsStatus).to.eql(\"disabled\");",
+													"});",
+													"",
+													"",
+													"",
+													"let boardStatus = jsonData.limits['54bba24af6196bd5f824e563'].boards.totalPerMember.status;",
+													"",
+													"",
+													"for (let key in jsonData.limits){ //iterates on each property using a variable, in this case, \"key\"",
+													"    console.log(key, jsonData.limits[key]); // what is the value of key, and how can you access the property in the object",
+													"    if (jsonData.limits[key].hasOwnProperty('boards')) { // take advantage to the method that each object has. \"hasOwnProperty\"method checks if it has property.",
+													"        boardStatus = jsonData.limits[key].boards.totalPerMember.status",
+													"    }",
+													"    ",
+													"",
+													"}",
+													"",
+													"",
+													"console.log(\"board status is \"+boardStatus);",
+													"",
+													"",
+													"",
+													"pm.test(\"Status should be ok\", function () {",
+													"    pm.expect(boardStatus).to.eql(\"ok\");",
+													"});"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {},
+										"url": {
+											"raw": "http://www.mocky.io/v2/5ab34d8c2f00006600ca3652",
+											"protocol": "http",
+											"host": [
+												"www",
+												"mocky",
+												"io"
+											],
+											"path": [
+												"v2",
+												"5ab34d8c2f00006600ca3652"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "c92c773f-2812-4d89-97d0-e2fe2cdb6b96",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "86bdc47d-9e8a-465f-8ef6-fd74892c5d68",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

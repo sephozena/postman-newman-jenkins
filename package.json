@@ -1,0 +1,12 @@
+{
+  "name": "exported_files",
+  "version": "1.0.0",
+  "description": "Project for storing postman tests",
+  "scripts": {
+    "api-test-production": "newman run tests/Jsonplaceholder.com.postman_collection.json"
+  },
+  "author": "Seph Ozena",
+  "dependencies": {
+    "newman": "^3.9.4"
+  }
+}
